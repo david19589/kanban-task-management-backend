@@ -1,10 +1,7 @@
-import express from "express";
 import pool from "../sqlDb.js";
 import { v4 as uuid } from "uuid";
 
-const router = express.Router();
-
-router.get("/", async (req, res) => {
+export const getTask = async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM task");
     res.json(result.rows);
@@ -12,9 +9,9 @@ router.get("/", async (req, res) => {
     console.error("Error retrieving tasks", err);
     res.status(500).send("Error retrieving tasks");
   }
-});
+};
 
-router.post("/", async (req, res) => {
+export const createTask = async (req, res) => {
   const newTask = req.body;
   const taskId = uuid();
 
@@ -35,9 +32,9 @@ router.post("/", async (req, res) => {
     console.error("Error adding tasks", err);
     res.status(500).send("Error adding tasks");
   }
-});
+};
 
-router.put("/:id", async (req, res) => {
+export const updateTask = async (req, res) => {
   const id = req.params.id;
   const newName = req.body.task_name;
   const newDescription = req.body.description;
@@ -60,9 +57,9 @@ router.put("/:id", async (req, res) => {
       message: `update of task with id ${id} is unsuccessful.`,
     });
   }
-});
+};
 
-router.delete("/:id", async (req, res, next) => {
+export const deleteTask = async (req, res, next) => {
   const id = req.params.id;
 
   try {
@@ -80,6 +77,4 @@ router.delete("/:id", async (req, res, next) => {
     console.error("Error deleting task:", err);
     next(err);
   }
-});
-
-export default router;
+};

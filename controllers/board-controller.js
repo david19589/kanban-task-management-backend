@@ -1,10 +1,7 @@
-import express from "express";
 import pool from "../sqlDb.js";
 import { v4 as uuid } from "uuid";
 
-const router = express.Router();
-
-router.get("/", async (req, res) => {
+export const getBoard = async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM board");
     res.json(result.rows);
@@ -12,9 +9,9 @@ router.get("/", async (req, res) => {
     console.error("Error retrieving board", err);
     res.status(500).send("Error retrieving board");
   }
-});
+};
 
-router.post("/", async (req, res) => {
+export const createBoard = async (req, res) => {
   const newBoard = req.body;
   const boardId = uuid();
 
@@ -29,9 +26,9 @@ router.post("/", async (req, res) => {
     console.error("Error adding todo:", err);
     res.status(500).send("Error adding todo");
   }
-});
+};
 
-router.put("/:id", async (req, res) => {
+export const updateBoard = async (req, res) => {
   const id = req.params.id;
   const newName = req.body.board_name;
 
@@ -51,9 +48,9 @@ router.put("/:id", async (req, res) => {
       message: `update of board with id ${id} is unsuccessful.`,
     });
   }
-});
+};
 
-router.delete("/:id", async (req, res, next) => {
+export const deleteBoard = async (req, res, next) => {
   const id = req.params.id;
 
   try {
@@ -71,6 +68,4 @@ router.delete("/:id", async (req, res, next) => {
     console.error("Error deleting board:", err);
     next(err);
   }
-});
-
-export default router;
+};

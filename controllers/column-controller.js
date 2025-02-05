@@ -1,10 +1,7 @@
-import express from "express";
 import pool from "../sqlDb.js";
 import { v4 as uuid } from "uuid";
 
-const router = express.Router();
-
-router.get("/", async (req, res) => {
+export const getColumn = async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM board_column");
     res.json(result.rows);
@@ -12,9 +9,9 @@ router.get("/", async (req, res) => {
     console.error("Error retrieving columns", err);
     res.status(500).send("Error retrieving columns");
   }
-});
+};
 
-router.post("/", async (req, res) => {
+export const createColumn = async (req, res) => {
   const newColumn = req.body;
   const columnId = uuid();
 
@@ -29,9 +26,9 @@ router.post("/", async (req, res) => {
     console.error("Error adding column:", err);
     res.status(500).send("Error adding column");
   }
-});
+};
 
-router.put("/:id", async (req, res) => {
+export const updateColumn = async (req, res) => {
   const id = req.params.id;
   const newName = req.body.column_name;
 
@@ -52,9 +49,9 @@ router.put("/:id", async (req, res) => {
     });
     console.log(id);
   }
-});
+};
 
-router.delete("/:id", async (req, res, next) => {
+export const deleteColumn = async (req, res, next) => {
   const id = req.params.id;
 
   try {
@@ -73,6 +70,4 @@ router.delete("/:id", async (req, res, next) => {
     console.error("Error deleting column:", err);
     next(err);
   }
-});
-
-export default router;
+};

@@ -1,10 +1,7 @@
-import express from "express";
 import pool from "../sqlDb.js";
 import { v4 as uuid } from "uuid";
 
-const router = express.Router();
-
-router.get("/", async (req, res) => {
+export const getSubtask = async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM subtask");
     res.json(result.rows);
@@ -12,9 +9,9 @@ router.get("/", async (req, res) => {
     console.error("Error retrieving subtasks", err);
     res.status(500).send("Error retrieving subtasks");
   }
-});
+};
 
-router.post("/", async (req, res) => {
+export const createSubtask = async (req, res) => {
   const newSubtask = req.body;
   const subtaskId = uuid();
 
@@ -34,9 +31,9 @@ router.post("/", async (req, res) => {
     console.error("Error adding subtasks", err);
     res.status(500).send("Error adding subtasks");
   }
-});
+};
 
-router.put("/:id", async (req, res) => {
+export const updateSubtask = async (req, res) => {
   const id = req.params.id;
   const newName = req.body.subtask_name;
   const IsCompleted = req.body.is_completed;
@@ -57,9 +54,9 @@ router.put("/:id", async (req, res) => {
       message: `update of subtask with id ${id} is unsuccessful.`,
     });
   }
-});
+};
 
-router.delete("/:id", async (req, res, next) => {
+export const deleteSubtask = async (req, res, next) => {
   const id = req.params.id;
 
   try {
@@ -75,6 +72,4 @@ router.delete("/:id", async (req, res, next) => {
     console.error("Error deleting subtask:", err);
     next(err);
   }
-});
-
-export default router;
+};
